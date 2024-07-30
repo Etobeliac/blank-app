@@ -63,7 +63,12 @@ def main():
         df_classified = pd.DataFrame(classified_domains, columns=['Domain', 'Category', 'Language'])
         df_unclassified = pd.DataFrame(unclassified_domains, columns=['Domain'])
 
-        df_final = pd.concat([df_classified, df_unclassified], axis=1)
+        df_final = pd.DataFrame({
+            'A': df_classified['Domain'],
+            'B': df_classified['Category'],
+            'C': df_classified['Language'],
+            'E': df_unclassified['Domain']
+        })
 
         output = io.BytesIO()
         with pd.ExcelWriter(output, engine='openpyxl') as writer:
