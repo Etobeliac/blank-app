@@ -60,15 +60,24 @@ def main():
             progress_bar.progress(progress)
             status_text.text(f"{i+1}/{len(domaines)} domaines traités")
 
+        # Créer un DataFrame pour les domaines classifiés
         df_classified = pd.DataFrame(classified_domains, columns=['Domain', 'Category', 'Language'])
-        df_unclassified = pd.DataFrame(unclassified_domains, columns=['Domain'])
+        
+        # Créer un DataFrame pour les domaines non classifiés
+        df_unclassified = pd.DataFrame(unclassified_domains, columns=['Unclassified Domain'])
 
+        # Créer le DataFrame final
+        max_rows = max(len(df_classified), len(df_unclassified))
         df_final = pd.DataFrame({
-            'A': df_classified['Domain'],
-            'B': df_classified['Category'],
-            'C': df_classified['Language'],
-            'E': df_unclassified['Domain']
+            'Domain': df_classified['Domain'].reindex(range(max_rows)),
+            'Category': df_classified['Category'].reindex(range(max_rows)),
+            'Language': df_classified['Language'].reindex(range(max_rows)),
+            'Unclassified Domain': df_unclassified['Unclassified Domain'].reindex(range(max_rows))
         })
+
+        # Réorganiser les colonnes pour avoir la colonne 'Unclassified Domain' en colonne E
+        df_final = df_final[['Domain', 'Category', 'Language', 'Unclassified Domain']]
+        df_final.columns = ['A', 'B', 'C', 'E']  # Renommer les colonnes
 
         output = io.BytesIO()
         with pd.ExcelWriter(output, engine='openpyxl') as writer:
