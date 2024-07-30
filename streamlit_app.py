@@ -35,4 +35,10 @@ else:
         # Ajouter un bouton pour exécuter le script sélectionné
         if selected_script and st.sidebar.button('Exécuter le script'):
             st.write(f"Exécution du script {selected_script}...")
-            script_path = os.path.join(scripts_dir, selected
+            script_path = os.path.join(scripts_dir, selected_script)
+            run_script(script_path)
+    else:
+        st.sidebar.write("Aucun script trouvé dans le répertoire 'scripts'.")
+
+# Footer
+st.sidebar.markdown("© 2024 | by PirateSEO")
