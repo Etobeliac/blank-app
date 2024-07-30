@@ -46,7 +46,6 @@ def scrap_filtre_48h():
         st.dataframe(df)
 
         # Permettre le téléchargement du fichier
-        @st.cache_data
         def convert_df(df):
             # IMPORTANT: Convertir le dataframe en CSV pour le téléchargement.
             return df.to_csv(index=False).encode('utf-8')
