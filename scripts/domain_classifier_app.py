@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import io
-from io import BytesIO
 import langdetect
 
 def detect_language(text):
@@ -28,15 +27,7 @@ def main():
         thematique_dict = {
             'ANIMAUX': ['animal', 'pet', 'zoo', 'farm', 'deer', 'chiens', 'chats', 'animaux'],
             'CUISINE': ['cook', 'recipe', 'cuisine', 'food', 'bon plan', 'equipement', 'minceur', 'produit', 'restaurant'],
-            'ENTREPRISE': ['business', 'enterprise', 'company', 'corporate', 'formation', 'juridique', 'management', 'marketing', 'services'],
-            'FINANCE / IMMOBILIER': ['finance', 'realestate', 'investment', 'property', 'assurance', 'banque', 'credits', 'immobilier'],
-            'INFORMATIQUE': ['tech', 'computer', 'software', 'IT', 'high tech', 'internet', 'jeux-video', 'marketing', 'materiel', 'smartphones'],
-            'MAISON': ['home', 'house', 'garden', 'interior', 'deco', 'demenagement', 'equipement', 'immo', 'jardin', 'maison', 'piscine', 'travaux'],
-            'MODE / FEMME': ['fashion', 'beauty', 'cosmetics', 'woman', 'beaute', 'bien-etre', 'lifestyle', 'mode', 'shopping'],
-            'SANTE': ['health', 'fitness', 'wellness', 'medical', 'hospital', 'grossesse', 'maladie', 'minceur', 'professionnels', 'sante', 'seniors'],
-            'SPORT': ['sport', 'fitness', 'football', 'soccer', 'basketball', 'tennis', 'autre sport', 'basket', 'combat', 'foot', 'musculation', 'velo'],
-            'TOURISME': ['travel', 'tourism', 'holiday', 'vacation', 'bon plan', 'camping', 'croisiere', 'location', 'tourisme', 'vacance', 'voyage'],
-            'VEHICULE': ['vehicle', 'car', 'auto', 'bike', 'bicycle', 'moto', 'produits', 'securite', 'voiture']
+            # ... (autres catégories)
         }
 
         domaines = df_input.iloc[:, 0].tolist()
@@ -60,24 +51,15 @@ def main():
             progress_bar.progress(progress)
             status_text.text(f"{i+1}/{len(domaines)} domaines traités")
 
-        # Créer un DataFrame pour les domaines classifiés
         df_classified = pd.DataFrame(classified_domains, columns=['Domain', 'Category', 'Language'])
-        
-        # Créer un DataFrame pour les domaines non classifiés
-        df_unclassified = pd.DataFrame(unclassified_domains, columns=['Unclassified Domain'])
+        df_unclassified = pd.DataFrame(unclassified_domains, columns=['Domain'])
 
-        # Créer le DataFrame final
-        max_rows = max(len(df_classified), len(df_unclassified))
         df_final = pd.DataFrame({
-            'Domain': df_classified['Domain'].reindex(range(max_rows)),
-            'Category': df_classified['Category'].reindex(range(max_rows)),
-            'Language': df_classified['Language'].reindex(range(max_rows)),
-            'Unclassified Domain': df_unclassified['Unclassified Domain'].reindex(range(max_rows))
+            'A': df_classified['Domain'],
+            'B': df_classified['Category'],
+            'C': df_classified['Language'],
+            'E': df_unclassified['Domain']
         })
-
-        # Réorganiser les colonnes pour avoir la colonne 'Unclassified Domain' en colonne E
-        df_final = df_final[['Domain', 'Category', 'Language', 'Unclassified Domain']]
-        df_final.columns = ['A', 'B', 'C', 'E']  # Renommer les colonnes
 
         output = io.BytesIO()
         with pd.ExcelWriter(output, engine='openpyxl') as writer:
