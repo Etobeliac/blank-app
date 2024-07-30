@@ -39,4 +39,4 @@ else:
         st.sidebar.warning("Aucun script trouvé dans le répertoire 'scripts'.")
 
 # Footer
-st.sidebar.markdown("© 2024 | by PirateSEO")
+st.sidebar.markdown("© 2024 | by Etobeliac")
