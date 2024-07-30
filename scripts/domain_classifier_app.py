@@ -1,78 +1,13 @@
 import streamlit as st
-import pandas as pd
-import io
-import langdetect
-
-def detect_language(text):
-    try:
-        return langdetect.detect(text)
-    except:
-        return 'unknown'
-
-def classify_domain(domain, categories):
-    for category, keywords in categories.items():
-        for keyword in keywords:
-            if keyword in domain.lower():
-                return category
-    return 'NON CLASSÉ'
 
 def main():
     st.title("Classification de noms de domaine")
 
-    uploaded_file = st.file_uploader("Déposez votre fichier Excel ici", type=["xlsx"])
+    st.file_uploader("Déposez votre fichier Excel ici", type=["xlsx"])
 
-    if uploaded_file is not None:
-        df_input = pd.read_excel(uploaded_file)
+    st.button("Classifier les domaines")
 
-        thematique_dict = {
-            'ANIMAUX': ['animal', 'pet', 'zoo', 'farm', 'deer', 'chiens', 'chats', 'animaux'],
-            'CUISINE': ['cook', 'recipe', 'cuisine', 'food', 'bon plan', 'equipement', 'minceur', 'produit', 'restaurant'],
-            # ... (autres catégories)
-        }
-
-        domaines = df_input.iloc[:, 0].tolist()
-
-        progress_bar = st.progress(0)
-        status_text = st.empty()
-
-        classified_domains = []
-        unclassified_domains = []
-
-        for i, domain in enumerate(domaines):
-            category = classify_domain(domain, thematique_dict)
-            language = detect_language(domain)
-            
-            if category != 'NON CLASSÉ':
-                classified_domains.append((domain, category, language))
-            else:
-                unclassified_domains.append(domain)
-            
-            progress = (i + 1) / len(domaines)
-            progress_bar.progress(progress)
-            status_text.text(f"{i+1}/{len(domaines)} domaines traités")
-
-        df_classified = pd.DataFrame(classified_domains, columns=['Domain', 'Category', 'Language'])
-        df_unclassified = pd.DataFrame(unclassified_domains, columns=['Domain'])
-
-        df_final = pd.DataFrame({
-            'A': df_classified['Domain'],
-            'B': df_classified['Category'],
-            'C': df_classified['Language'],
-            'E': df_unclassified['Domain']
-        })
-
-        output = io.BytesIO()
-        with pd.ExcelWriter(output, engine='openpyxl') as writer:
-            df_final.to_excel(writer, index=False)
-        
-        st.download_button(
-            label="Télécharger le fichier Excel",
-            data=output.getvalue(),
-            file_name="domaines_classes.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
-
-        st.success("Classification terminée. Vous pouvez maintenant télécharger le fichier.")
+    st.success("Ceci est un message de succès")
 
 if __name__ == "__main__":
     main()
