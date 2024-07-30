@@ -23,22 +23,20 @@ scripts_dir = 'scripts'
 if not os.path.exists(scripts_dir):
     st.sidebar.error(f"Le répertoire '{scripts_dir}' n'existe pas. Veuillez le créer et ajouter des scripts.")
 else:
-    st.sidebar.write(f"Le répertoire '{scripts_dir}' existe.")
+    st.sidebar.success(f"Le répertoire '{scripts_dir}' existe.")
+    
     # Récupérer la liste des scripts
     scripts = [f for f in os.listdir(scripts_dir) if f.endswith('.py')]
-    st.sidebar.write(f"Scripts trouvés : {scripts}")
-
-    # Ajouter une sélection de script avec des boutons radio dans la barre latérale
+    
     if scripts:
         selected_script = st.sidebar.radio('Sélectionnez un script', scripts)
-        
-        # Ajouter un bouton pour exécuter le script sélectionné
-        if selected_script and st.sidebar.button('Exécuter le script'):
+
+        if st.sidebar.button('Exécuter le script'):
             st.write(f"Exécution du script {selected_script}...")
             script_path = os.path.join(scripts_dir, selected_script)
             run_script(script_path)
     else:
-        st.sidebar.write("Aucun script trouvé dans le répertoire 'scripts'.")
+        st.sidebar.warning("Aucun script trouvé dans le répertoire 'scripts'.")
 
 # Footer
 st.sidebar.markdown("© 2024 | by PirateSEO")
