@@ -12,29 +12,26 @@ def run_script(script_path):
 
 # Titre de l'application
 st.title('Scripts de Pirates')
-st.sidebar.header("Les scripts")
 
 # Répertoire des scripts
 scripts_dir = 'scripts'
 
 # Vérifier si le répertoire existe
 if not os.path.exists(scripts_dir):
-    st.sidebar.error(f"Le répertoire '{scripts_dir}' n'existe pas. Veuillez le créer et ajouter des scripts.")
+    st.error(f"Le répertoire '{scripts_dir}' n'existe pas. Veuillez le créer et ajouter des scripts.")
 else:
-    st.sidebar.success(f"Le répertoire '{scripts_dir}' existe.")
-    
     # Récupérer la liste des scripts
     scripts = [f for f in os.listdir(scripts_dir) if f.endswith('.py')]
     
     if scripts:
-        selected_script = st.sidebar.radio('Sélectionnez un script', scripts)
-
-        if st.sidebar.button('Exécuter le script'):
+        selected_script = st.selectbox('Sélectionnez un script', scripts)
+        
+        if st.button('Exécuter le script'):
             st.write(f"Exécution du script {selected_script}...")
             script_path = os.path.join(scripts_dir, selected_script)
             run_script(script_path)
     else:
-        st.sidebar.warning("Aucun script trouvé dans le répertoire 'scripts'.")
+        st.warning("Aucun script trouvé dans le répertoire 'scripts'.")
 
 # Footer
-st.sidebar.markdown("© 2024 | by PirateSEO")
+st.markdown("© 2024 | by PirateSEO")
