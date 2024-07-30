@@ -1,8 +1,6 @@
 import streamlit as st
 import os
 import importlib.util
-import pandas as pd
-from datetime import datetime
 
 # Fonction pour importer dynamiquement un module et exécuter une fonction
 def run_script(script_path):
