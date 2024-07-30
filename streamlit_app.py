@@ -7,7 +7,7 @@ def read_file(file_path):
         return file.read()
 
 # Titre de l'application
-st.title('My Script Viewer App')
+st.title('PYTHON')
 
 # Récupérer la liste des scripts
 scripts_dir = 'scripts'
