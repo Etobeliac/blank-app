@@ -20,15 +20,18 @@ def scrap_filtre_48h():
         domain_cells = soup.select('table.base1 > tbody > tr > td:nth-child(2)')
 
         domains = []
+        total_domains = len(domain_cells)
         progress_text = "Scraping en cours. Veuillez patienter..."
         my_bar = st.progress(0)
         
         for i, cell in enumerate(domain_cells):
             domains.append(cell.text.strip())
             # Ajouter un délai aléatoire entre 5 et 20 secondes
-            time.sleep(random.uniform(5, 20))
+            time_to_wait = random.uniform(5, 20)
+            st.text(f"Attente de {time_to_wait:.2f} secondes...")
+            time.sleep(time_to_wait)
             # Mettre à jour la barre de progression
-            my_bar.progress((i + 1) / len(domain_cells))
+            my_bar.progress((i + 1) / total_domains)
         
         # Créer un DataFrame pandas
         df = pd.DataFrame(domains, columns=["Domain"])
@@ -46,14 +49,14 @@ def scrap_filtre_48h():
         @st.cache_data
         def convert_df(df):
             # IMPORTANT: Convertir le dataframe en CSV pour le téléchargement.
-            return df.to_csv().encode('utf-8')
+            return df.to_csv(index=False).encode('utf-8')
 
         csv = convert_df(df)
 
         st.download_button(
             label="Télécharger le fichier",
             data=csv,
-            file_name=output_path,
+            file_name=f'domains_{date_str}.csv',
             mime='text/csv',
         )
 
